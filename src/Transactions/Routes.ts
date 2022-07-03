@@ -17,7 +17,7 @@ router.post( "/makepayment", ( req: any, res ) => {
         });
     }
 
-    TransactionControler.createTransaction( req.body )
+    TransactionControler.createTransaction( req.body, req.tokenData.id )
     .then( newTransaction => HttpHelper.sendResponse( res, 201, newTransaction, null ))
     .catch( err => HttpHelper.sendAcknowledgement( res, 500, err ) );
 

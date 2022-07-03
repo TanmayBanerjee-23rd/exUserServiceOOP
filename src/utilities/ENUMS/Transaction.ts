@@ -1,0 +1,12 @@
+export enum PAYMENT_GATEWAY {
+    PAYTM = "PAYTM",
+    RAZOR_PAY = "RAZOR_PAY",
+    STRIPE = "STRIPE"
+};
+
+export enum TRXN_STATUS {
+    INITIATED = "INITIATED",
+    PROCESSING = "PROCESSING",
+    COMPLETED = "COMPLETED",
+    FAILED = "FAILED"
+};

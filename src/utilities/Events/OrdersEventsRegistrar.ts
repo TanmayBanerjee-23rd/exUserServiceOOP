@@ -1,3 +1,4 @@
+import { EVENTS_NAMES } from "../ENUMS/Common";
 import EventEmitterInstance from "./Instancetiator";
 
 class OrdersEventsRegistrar {
@@ -9,7 +10,7 @@ class OrdersEventsRegistrar {
 
     registerEvents() {
 
-        this.eventEmitter.on( "deliveryStatusChange", () => {
+        this.eventEmitter.on( EVENTS_NAMES.DELIVERY_STATUS_CHANGE, () => {
             console.log( "Mail should be sent to the user." );
         });
     };

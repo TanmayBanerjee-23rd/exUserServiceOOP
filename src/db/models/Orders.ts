@@ -16,7 +16,8 @@ class MOrder extends Model<iOrderEntity> {
     declare cancelStatus: boolean;
     declare deliveryStatus: boolean;
     declare refundStatus: boolean;
-    declare paymentMode: "Online" | "COD";
+    declare paymentMode: string;
+    declare paymentStatus: string;
 };
 
 class Orders {
@@ -49,7 +50,8 @@ class Orders {
             deliveryStatus: DataTypes.STRING,
             cancelStatus: DataTypes.BOOLEAN,
             refundStatus: DataTypes.BOOLEAN,
-            paymentMode: DataTypes.STRING
+            paymentMode: DataTypes.STRING,
+            paymentStatus: DataTypes.STRING
         }, {
             tableName: "Orders",
             sequelize

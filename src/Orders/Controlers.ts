@@ -3,6 +3,8 @@ import OrderMapper from "./Mappers";
 import EventsInstancetiator from "../utilities/Events/Instancetiator";
 import { iOrderEntity } from "../db/entities/Order";
 import { iOrderDTO, iOrderSummaryDTO } from "../utilities/DTO/Order";
+import { USER_TYPE } from "../utilities/ENUMS/User";
+import { EVENTS_NAMES, RESPONSE_TYPE } from "../utilities/ENUMS/Common";
 
 
 class OrderController {
@@ -22,7 +24,7 @@ class OrderController {
         return Promise.resolve( OrderMapper.mapToSummaryDTO( createdOrderEntity ) );
     };
 
-    async getAllOrders( userType: "admin" | "normalUser", userId: number ): Promise<iOrderSummaryDTO[]> {
+    async getAllOrders( userType: USER_TYPE, userId: number ): Promise<iOrderSummaryDTO[]> {
 
         const orderEntities: iOrderEntity[] = await OrderRepo.getAllOrders( userType, userId );
 
@@ -37,7 +39,7 @@ class OrderController {
 
         let orderDTO: iOrderDTO | iOrderSummaryDTO;
 
-        if ( responseType === "summary" ) orderDTO = OrderMapper.mapToSummaryDTO( orderEntity );
+        if ( responseType === RESPONSE_TYPE.SUMMARY ) orderDTO = OrderMapper.mapToSummaryDTO( orderEntity );
         else orderDTO = OrderMapper.mapToDTO( orderEntity );
 
         return Promise.resolve( orderDTO );
@@ -51,7 +53,7 @@ class OrderController {
             orderId ) );
 
         if ( orderObj.isDeliveryStatusChanged ) {
-            this.eventEmitter.emit( "deliveryStatusChange" );
+            this.eventEmitter.emit( EVENTS_NAMES.DELIVERY_STATUS_CHANGE );
         }
         
         return OrderMapper.mapToSummaryDTO( updatedOrderEntity );

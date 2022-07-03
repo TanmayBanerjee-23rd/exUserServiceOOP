@@ -7,7 +7,7 @@ class UserController {
 
     async registerUser( userObj: iUserDTO ): Promise<iUserDTO> {
 
-        const existingUserEntity: iUserEntity = ( await this.getUserByEmail( userObj.email ) );
+        const existingUserEntity: iUserDTO = ( await this.getUserByEmail( userObj.email ) );
 
         if ( existingUserEntity && Object.keys( existingUserEntity ).length ) {
             
@@ -35,7 +35,7 @@ class UserController {
         return Promise.resolve( UserMapper.mapToDTO( await UserRepo.getUserByEmail( userEmail ) ) );
     };
 
-    async updateUser( userId: number, userObj: iUserEntity ) {
+    async updateUser( userId: number, userObj: iUserDTO ) {
 
         const userEntity: iUserEntity = UserMapper.mapToEntity( userObj );
 

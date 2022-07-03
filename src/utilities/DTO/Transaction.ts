@@ -1,12 +1,14 @@
+import { PAYMENT_GATEWAY, TRXN_STATUS } from "../ENUMS/Transaction"
+
 export interface iTransactionDTO {
     id?: number,
     userId: number,
     orderId: number,
-    amount: number,
-    paymentGateway: "STRIPE" | "PAYTM" | "RAZOR_PAY",
+    amount?: number,
+    paymentGateway: PAYMENT_GATEWAY,
     initiationTimeStamp: string,
     settlementTimeStamp?: string,
-    status: "INITIATED" | "PROCESSING" | "COMPLETED" | "FAILED",
+    status?: TRXN_STATUS,
     gatewayTransactionId?: string,
     isPaymentStatusChanged?: boolean
 };
@@ -16,11 +18,17 @@ export interface iTransactionSummaryDTO {
     userId: number,
     orderId: number,
     amount: number,
-    status: "INITIATED" | "PROCESSING" | "COMPLETED" | "FAILED",
+    status: TRXN_STATUS,
     gatewayTransactionId?: string,
 };
 
-export interface iMakePaymentDTO {
+export interface iMakePaymentReqDTO {
+    orderId: number,
+    initiationTimeStamp: string,
+    paymentGateway: PAYMENT_GATEWAY
+};
+
+export interface iMakePaymentResDTO {
     id?: number,
     userId: number,
     orderId: number,

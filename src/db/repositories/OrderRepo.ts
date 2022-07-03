@@ -1,6 +1,7 @@
 import PaginateRepo from "./paginateRepo";
 import Orders from "../models/Orders";
 import { iOrderEntity } from "../entities/Order";
+import { USER_TYPE } from "../../utilities/ENUMS/User";
 
 const OFFSET = 0;
 const ROW_COUNT = 25;
@@ -11,22 +12,22 @@ class OrderRepo extends PaginateRepo<iOrderEntity> {
         return ( Orders.getOrderModelInstance() );
     };
 
-    async getAllOrders( userType: "admin" | "normalUser", userId: number ): Promise<iOrderEntity[]> {
+    async getAllOrders( userType: USER_TYPE, userId: number ): Promise<iOrderEntity[]> {
         
         let conditionObj: any = {};
 
-        if ( userType === "normalUser" ) {
+        if ( userType === USER_TYPE.NORMAL_USER ) {
             conditionObj.where = { buyerId: userId };
         }
 
         return ( await this.findAll( conditionObj ) );
     };
 
-    async getAllOrdersPageWise( userType: "admin" | "normalUser", userId: number, offSet: number, rowCount: number ): Promise<iOrderEntity[]> {
+    async getAllOrdersPageWise( userType: USER_TYPE, userId: number, offSet: number, rowCount: number ): Promise<iOrderEntity[]> {
 
         let conditionObj: any = {};
 
-        if ( userType === "normalUser" ) {
+        if ( userType === USER_TYPE.NORMAL_USER ) {
             conditionObj.where = { buyerId: userId };
         }
 

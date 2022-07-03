@@ -1,3 +1,5 @@
+import { USER_TYPE } from "../ENUMS/User";
+
 export interface iUserDTO {
     id?: number,
     firstName?: string,
@@ -6,5 +8,5 @@ export interface iUserDTO {
     email: string,
     password: string,
     phoneNumber: number,
-    userType: "admin" | "normalUser"
+    userType: USER_TYPE
 };

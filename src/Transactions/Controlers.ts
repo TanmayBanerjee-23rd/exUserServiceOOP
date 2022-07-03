@@ -2,7 +2,12 @@ import TransactionRepo from "../db/repositories/TransactionRepo";
 import TransactionMapper from "./Mappers";
 import EventsInstancetiator from "../utilities/Events/Instancetiator";
 import { iTransactionEntity } from "../db/entities/Transaction";
-import { iTransactionDTO, iTransactionSummaryDTO, iMakePaymentDTO } from "../utilities/DTO/Transaction";
+import { iMakePaymentReqDTO,iTransactionDTO, iTransactionSummaryDTO, iMakePaymentResDTO } from "../utilities/DTO/Transaction";
+import OrderRepo from "../db/repositories/OrderRepo";
+import { iOrderEntity } from "../db/entities/Order";
+import { TRXN_STATUS } from "../utilities/ENUMS/Transaction";
+import { USER_TYPE } from "../utilities/ENUMS/User";
+import { EVENTS_NAMES, RESPONSE_TYPE } from "../utilities/ENUMS/Common";
 
 
 class TransactionController {
@@ -13,16 +18,24 @@ class TransactionController {
         this.eventEmitter = EventsInstancetiator.getEmitterInstance();
     };
 
-    async createTransaction( transactionObj: iTransactionDTO ): Promise<iMakePaymentDTO> {
+    async createTransaction( transactionObj: iMakePaymentReqDTO, userId: number ): Promise<iMakePaymentResDTO> {
 
-        const transactionEntity: iTransactionEntity = TransactionMapper.mapToEntity( transactionObj );
+        const orderDetails: iOrderEntity = await OrderRepo.findOneById( transactionObj.orderId );
+
+        const newTransactionObj: iTransactionDTO = {
+            ...transactionObj,
+            userId,
+            amount: orderDetails.amount
+        };
+
+        const transactionEntity: iTransactionEntity = TransactionMapper.mapToEntity( newTransactionObj );
 
         const createdTransactionEntity = await TransactionRepo.create( transactionEntity ) ;
 
-        return Promise.resolve( TransactionMapper.mapToTrxnPostPayDTO( createdTransactionEntity ) );
+        return Promise.resolve( TransactionMapper.mapToMakePaymentResDTO( createdTransactionEntity ) );
     };
 
-    async getAllTransactions( userType: "admin" | "normalUser", userId: number ): Promise<iTransactionSummaryDTO[]> {
+    async getAllTransactions( userType: USER_TYPE, userId: number ): Promise<iTransactionSummaryDTO[]> {
 
         const transactionEntities: iTransactionEntity[] = await TransactionRepo.getAllTransactions( userType, userId );
 
@@ -37,7 +50,7 @@ class TransactionController {
 
         let transactionDTO: iTransactionDTO | iTransactionSummaryDTO;
 
-        if ( responseType === "summary" ) transactionDTO = TransactionMapper.mapToSummaryDTO( transactionEntity );
+        if ( responseType === RESPONSE_TYPE.SUMMARY ) transactionDTO = TransactionMapper.mapToSummaryDTO( transactionEntity );
         else transactionDTO = TransactionMapper.mapToDTO( transactionEntity );
 
         return Promise.resolve( transactionDTO );
@@ -50,8 +63,8 @@ class TransactionController {
         const updatedTransactionEntity: iTransactionEntity = ( await TransactionRepo.updateTransactionById( transactionEntity ,
             transactionId ) );
 
-        if ( transactionObj.isPaymentStatusChanged ) {
-            this.eventEmitter.emit( "transactionStatusChange", transactionObj );
+        if ( transactionObj.isPaymentStatusChanged && transactionObj.status === TRXN_STATUS.COMPLETED || transactionObj.status === "FAILED" ) {
+            this.eventEmitter.emit( EVENTS_NAMES.TRXN_STATUS_CHANGE, transactionObj );
         }
         
         return TransactionMapper.mapToSummaryDTO( updatedTransactionEntity );

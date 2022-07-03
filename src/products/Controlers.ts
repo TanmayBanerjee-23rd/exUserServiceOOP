@@ -2,6 +2,7 @@ import ProductRepo from "../db/repositories/ProductRepo";
 import ProductMapper from "./Mappers";
 import { iProductEntity } from "../db/entities/Product";
 import { iProductDTO, iProductSummaryDTO } from "../utilities/DTO/Product";
+import { RESPONSE_TYPE } from "../utilities/ENUMS/Common";
 
 
 class ProductController {
@@ -30,7 +31,7 @@ class ProductController {
 
         let productDTO: iProductDTO | iProductSummaryDTO;
 
-        if ( responseType === "summary" ) productDTO = ProductMapper.mapToSummaryDTO( productEntity );
+        if ( responseType === RESPONSE_TYPE.SUMMARY ) productDTO = ProductMapper.mapToSummaryDTO( productEntity );
         else productDTO = ProductMapper.mapToProductDTO( productEntity );
 
         return Promise.resolve( productDTO );

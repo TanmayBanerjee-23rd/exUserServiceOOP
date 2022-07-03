@@ -1,11 +1,13 @@
+import { PAYMENT_GATEWAY, TRXN_STATUS } from "../../utilities/ENUMS/Transaction";
+
 export interface iTransactionEntity {
     id?: number,
     userId: number,
     orderId: number,
     amount: number,
-    paymentGateway: "STRIPE" | "PAYTM" | "RAZOR_PAY",
+    paymentGateway: PAYMENT_GATEWAY,
     initiationTimeStamp: string,
     settlementTimeStamp: string,
-    status: "INITIATED" | "PROCESSING" | "COMPLETED" | "FAILED",
+    status: TRXN_STATUS,
     gatewayTransactionId?: string,
 };

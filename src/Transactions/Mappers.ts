@@ -1,5 +1,5 @@
 import { iTransactionEntity } from "../db/entities/Transaction";
-import { iTransactionDTO, iTransactionSummaryDTO, iMakePaymentDTO } from "../utilities/DTO/Transaction";
+import { iMakePaymentReqDTO, iTransactionDTO, iTransactionSummaryDTO, iMakePaymentResDTO } from "../utilities/DTO/Transaction";
 import GatewayProvider from "../PaymentGateways/Provider";
 class TransactionMapper {
 
@@ -43,7 +43,7 @@ class TransactionMapper {
         };
     };
 
-    async mapToTrxnPostPayDTO( transactionObj: iTransactionEntity ): Promise<iMakePaymentDTO> {
+    async mapToMakePaymentResDTO( transactionObj: iTransactionEntity ): Promise<iMakePaymentResDTO> {
         
         const paymentGateway = GatewayProvider.providePaymentGateWay( transactionObj.paymentGateway );
         const paymentDetails = await paymentGateway.makePayment();
@@ -53,9 +53,7 @@ class TransactionMapper {
             orderId: transactionObj.orderId,
             amount: transactionObj.amount,
             userId: transactionObj.userId,
-            MID: paymentDetails.MID,
-            WEBSITE: paymentDetails.WEBSITE,
-            TRX_URL: paymentDetails.TRX_URL
+            gatewayDetails: paymentDetails
         };
     };
 

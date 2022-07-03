@@ -1,6 +1,7 @@
 import PaginateRepo from "./paginateRepo";
 import Transactions from "../models/Transactions";
 import { iTransactionEntity } from "../entities/Transaction";
+import { USER_TYPE } from "../../utilities/ENUMS/User";
 
 const OFFSET = 0;
 const ROW_COUNT = 25;
@@ -11,22 +12,22 @@ class TransactionRepo extends PaginateRepo<iTransactionEntity> {
         return ( Transactions.getTransactionModelInstance() );
     };
 
-    async getAllTransactions( userType: "admin" | "normalUser", userId: number ): Promise<iTransactionEntity[]> {
+    async getAllTransactions( userType: USER_TYPE, userId: number ): Promise<iTransactionEntity[]> {
         
         let conditionObj: any = {};
 
-        if ( userType === "normalUser" ) {
+        if ( userType === USER_TYPE.NORMAL_USER ) {
             conditionObj.where = { userId: userId };
         }
 
         return ( await this.findAll( conditionObj ) );
     };
 
-    async getAllTransactionsPageWise( userType: "admin" | "normalUser", userId: number, offSet: number, rowCount: number ): Promise<iTransactionEntity[]> {
+    async getAllTransactionsPageWise( userType: USER_TYPE, userId: number, offSet: number, rowCount: number ): Promise<iTransactionEntity[]> {
 
         let conditionObj: any = {};
 
-        if ( userType === "normalUser" ) {
+        if ( userType === USER_TYPE.NORMAL_USER ) {
             conditionObj.where = { userId: userId };
         }
 

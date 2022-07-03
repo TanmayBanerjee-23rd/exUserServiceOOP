@@ -1,3 +1,5 @@
+import { DELIVERY_STATUS, PATMENT_MODE } from "../ENUMS/Order"
+
 export interface iOrderDTO {
     id?: number,
     productIds: number[],
@@ -8,9 +10,10 @@ export interface iOrderDTO {
     buyerName?: string,
     deliveryETA?: string,
     cancelStatus?: boolean,
-    deliveryStatus?: "packed" | "shipped" | "outForDelivery" | "delivered",
+    deliveryStatus?: DELIVERY_STATUS,
     refundStatus?: boolean,
-    paymentMode?: "Online" | "COD",
+    paymentMode?: PATMENT_MODE,
+    paymentStatus: boolean,
     isDeliveryStatusChanged?: boolean
 };
 

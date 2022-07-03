@@ -1,3 +1,5 @@
+import { USER_TYPE } from "../../utilities/ENUMS/User";
+
 export interface iUserEntity {
     id?: number,
     firstName?: string,
@@ -6,5 +8,5 @@ export interface iUserEntity {
     email: string,
     password: string,
     phoneNumber: number,
-    userType: "admin" | "normalUser"
+    userType: USER_TYPE
 };
