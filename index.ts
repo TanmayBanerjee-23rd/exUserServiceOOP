@@ -9,16 +9,29 @@ import SearchRoutes from "./src/search/Routes";
 import MySqlInstance from "./src/db/MySql";
 
 import EventsRegistrar from "./src/utilities/Events/Registrar";
+import HttpHelper from "./src/utilities/Helpers/httpResponse";
 
 const app = express();
 
 app.use( urlencoded({ extended: true }) );
 
-app.use( "/users", UserRoutes );
-app.use( "/categories", CategoryRoutes );
-app.use( "/subcategories", SubCategoryRoutes );
-app.use( "/products", ProductRoutes );
-app.use( "/search", SearchRoutes );
+app.use( "/user/users", UserRoutes );
+app.use( "/user/categories", CategoryRoutes );
+app.use( "/user/subcategories", SubCategoryRoutes );
+app.use( "/user/products", ProductRoutes );
+app.use( "/user/search", SearchRoutes );
+
+function errorHandler( err, req, res, next ) {
+
+    if ( res.headersSent ) {
+        return next( err );
+    }
+
+    console.log( `error  :: --> Server errorHandler Function : ${ err.message }` );
+    HttpHelper.sendAcknowledgement( res, 500, err );
+};
+
+app.use( errorHandler );
 
 MySqlInstance.initialiseMySql();
 

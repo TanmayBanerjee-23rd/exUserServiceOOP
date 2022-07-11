@@ -6,7 +6,7 @@ import { iOrderEntity } from '../entities/Order';
 class MOrder extends Model<iOrderEntity> {
 
     declare id: number;
-    declare productIds: number[];
+    declare productIds: string;
     declare quantity: number;
     declare amount: number;
     declare deliveryAddress: string;
@@ -32,8 +32,14 @@ class Orders {
                 primaryKey: true
             },
             productIds: {
-                type: DataTypes.ARRAY,
-                allowNull: false
+                type: DataTypes.STRING,
+                allowNull: false,
+                get() {
+                    return this.getDataValue( "productIds" ).split(';')
+                },
+                set( val: string[] ) {
+                   this.setDataValue( "productIds", val.join( ';' ) );
+                },
             },
             quantity: {
                 type: DataTypes.INTEGER,

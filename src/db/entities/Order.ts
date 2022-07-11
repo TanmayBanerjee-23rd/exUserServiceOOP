@@ -2,7 +2,7 @@ import { DELIVERY_STATUS, PATMENT_MODE } from "../../utilities/ENUMS/Order";
 
 export interface iOrderEntity {
     id?: number,
-    productIds: number[],
+    productIds: string,
     quantity: number,
     amount: number,
     deliveryAddress: string,

@@ -2,7 +2,7 @@ import { DELIVERY_STATUS, PATMENT_MODE } from "../ENUMS/Order"
 
 export interface iOrderDTO {
     id?: number,
-    productIds: number[],
+    productIds: string,
     quantity: number,
     amount: number,
     deliveryAddress: string,
